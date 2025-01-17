@@ -7,7 +7,7 @@ class RestaurantConfig(AppConfig):
     name = 'restaurant'
     verbose_name = _('Restaurants')
 
-    def ready(self):
-        from .signals import connect_signals
+    # def ready(self):
+        # from .signals import connect_signals
 
-        connect_signals()
+        # connect_signals()
