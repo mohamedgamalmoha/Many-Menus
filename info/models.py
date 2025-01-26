@@ -26,6 +26,23 @@ class MainInfo(models.Model):
         return str(self.title)
 
 
+class HeaderImage(models.Model):
+    info = models.ForeignKey(MainInfo, default=None, on_delete=models.CASCADE, related_name="header_images",
+                                   verbose_name=_("Header Image"))
+    image = ResizedImageField(null=True, size=[1920, 1080], quality=100, force_format=FORCED_IMAGE_FORMAT,
+                              validators=[FileSizeValidator(max_upload_file_size=MAX_FILE_SIZE)],
+                              upload_to='headers/', verbose_name=_("Image"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Active"),
+                                    help_text=_("Setting it to false, makes the image disappear from the page"))
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation Date'))
+    update_at = models.DateTimeField(auto_now=True, verbose_name=_('Update Date'))
+
+    class Meta:
+        verbose_name = _('Home Page Image')
+        verbose_name_plural = _('Home Page Images')
+        ordering = ('-create_at', '-update_at')
+
+
 class Service(models.Model):
     title = models.CharField(max_length=500, verbose_name=_("Title"))
     description = models.TextField(verbose_name=_("Description"))

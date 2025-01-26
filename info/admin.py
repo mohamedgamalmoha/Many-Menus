@@ -4,7 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 
 from restaurant.admin.base import ImageDisplayAminMixin
-from .models import MainInfo, Service, AboutUs, Theme, SocialMedia, ContactUs
+from .models import MainInfo, HeaderImage, Service, AboutUs, Theme, SocialMedia, ContactUs
+
+
+class HeaderImageInlineAdmin(ImageDisplayAminMixin, admin.TabularInline):
+    model = HeaderImage
+    readonly_fields = ('create_at', 'update_at')
+    readonly_image_fields = ['view_image']
 
 
 class MainInfoAdmin(ImageDisplayAminMixin, TranslationAdmin):
@@ -15,6 +21,7 @@ class MainInfoAdmin(ImageDisplayAminMixin, TranslationAdmin):
         (_('Main Info'), {'fields': ('title', 'description', 'image', 'view_image')}),
         (_('Important Dates'), {'fields': ('create_at', 'update_at')}),
     )
+    inlines = [HeaderImageInlineAdmin]
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -23,6 +30,8 @@ class MainInfoAdmin(ImageDisplayAminMixin, TranslationAdmin):
         if self.model.objects.count() >= 1:
             return False
         return super().has_add_permission(request)
+
+
 
 
 class ActiveTitleWithDescriptionAdmin(ImageDisplayAminMixin, TranslationAdmin):
