@@ -84,12 +84,6 @@ class RestaurantCustomerAdmin(PermissionsAllowOwnerAdminMixin, ImageDisplayAminM
         queryset = super().get_queryset(request)
         return queryset.filter(owner=request.user)
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        if 'primary_color' in form.base_fields:
-            form.base_fields['primary_color'].widget = AdminTextInputWidget(attrs={'type': 'color'})
-        return form
-
     def show_theme(self, obj):
         theme = obj.theme
         if theme and theme.image:

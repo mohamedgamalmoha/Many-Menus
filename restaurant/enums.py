@@ -10,7 +10,8 @@ class SocialMediaPlatform(models.TextChoices):
     TIKTOK = 'tiktok', _("TikTok")
     YOUTUBE = 'youtube', _("YouTube")
     PINTEREST = 'pinterest', _("Pinterest")
-    PHONE_NUMBER = 'phone_number', _('Phone Number')
+    PHONE_NUMBER_1 = 'phone_number_1', _('Phone Number 1')
+    PHONE_NUMBER_2 = 'phone_number_2', _('Phone Number 2')
 
 
 class DaysOfWeekChoice(models.TextChoices):
