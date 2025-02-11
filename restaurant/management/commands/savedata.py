@@ -1,10 +1,22 @@
 import json
+from decimal import Decimal
 from typing import Dict, List, Optional, Set, Tuple
 
 from django.apps import apps
 from django.db.models import Model
 from django.core import serializers
 from django.core.management.base import BaseCommand
+
+
+class DecimalEncoder(json.JSONEncoder):
+    """
+    Custom JSON encoder to handle Decimal objects.
+    """
+
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
 
 
 class Command(BaseCommand):
@@ -127,7 +139,7 @@ class Command(BaseCommand):
         """
         if output_file:
             with open(output_file, "w") as f:
-                json.dump(data, f, indent=2)
+                json.dump(data, f, indent=2, cls=DecimalEncoder)
             self.stdout.write(self.style.SUCCESS(f"Data successfully written to {output_file}"))
         else:
-            self.stdout.write(json.dumps(data, indent=2))
+            self.stdout.write(json.dumps(data, indent=2, cls=DecimalEncoder))
