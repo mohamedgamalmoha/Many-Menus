@@ -68,7 +68,7 @@ class ProductTypeSerializer(DefaultImageSerializerMixin, serializers.ModelSerial
         read_only_fields = ('create_at', 'update_at')
 
 
-class ProductSerializer(HeaderImageSerializer, FlexFieldsModelSerializer):
+class ProductSerializer(DefaultImageSerializerMixin, FlexFieldsModelSerializer):
     types = ProductTypeSerializer(many=True)
     variants = ProductVariantSerializer(many=True)
     default_image_url = DEFAULT_PRODUCT_IMAGE_URL
