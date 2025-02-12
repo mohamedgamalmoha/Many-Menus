@@ -150,7 +150,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products", verbose_name=_("Category"))
     name = models.CharField(max_length=255, verbose_name=_("Product Name"))
     description = models.TextField(blank=True, null=True, verbose_name=_("Description"))
-    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Price"))
+    price = models.CharField(max_length=50, verbose_name=_("Price"))
     types = models.ManyToManyField('ProductType', blank=True, related_name='types', verbose_name=_("Types"))
     variants = models.ManyToManyField('ProductVariant', blank=True, related_name='products', verbose_name=_("Variants"))
     image = ResizedImageField(blank=True, null=True, size=[600, 600], quality=100, force_format=FORCED_IMAGE_FORMAT,
@@ -177,7 +177,7 @@ class ProductVariant(models.Model):
     restaurant = models.ForeignKey(Restaurant, null=True, blank=True, on_delete=models.CASCADE,
                                    related_name="product_variants", verbose_name=_("Restaurant"))
     name = models.CharField(max_length=100, verbose_name=_("Variant Name"))
-    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Variant Price"))
+    price = models.CharField(max_length=50, verbose_name=_("Variant Price"))
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
 
