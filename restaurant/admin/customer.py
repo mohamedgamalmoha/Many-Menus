@@ -53,7 +53,7 @@ class ProductInlineCustomerAdmin(TranslationInlineModelAdmin, ImageDisplayAminMi
     extra = 1
     min_num = 0
     max_num = None
-    can_delete = True
+    can_delete = False
     show_change_link = False
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
