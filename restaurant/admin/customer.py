@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib import admin
-from django.contrib.admin.widgets import AdminTextInputWidget
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from modeltranslation.admin import TranslationAdmin, TranslationInlineModelAdmin
 
 from ..constants import DEFAULT_THEME_IMAGE_URL
-from ..models import HeaderImage, SocialMediaLink, WorkTime, Product, ProductVariant
+from ..models import HeaderImage, SocialMediaLink, WorkTime, Category, Product, ProductVariant
 from .base import (PermissionsAllowAllAdminMixin, PermissionsAllowOwnerAdminMixin, RestaurantRelatedObjectAdminMixin,
                    ImageDisplayAminMixin)
 
@@ -112,6 +111,34 @@ class CategoryCustomerAdmin(PermissionsAllowOwnerAdminMixin, RestaurantRelatedOb
         (_('Main Info'), {'fields': ('name', 'image', 'view_image', 'is_active', 'order')}),
     )
     inlines = [ProductInlineCustomerAdmin]
+
+
+class ProductCustomerAdmin(ImageDisplayAminMixin, TranslationAdmin):
+    list_display = ('name', 'category', 'is_active', 'create_at', 'update_at')
+    readonly_fields = ['create_at', 'update_at', 'view_image']
+    fieldsets = (
+        (_('Main Info'), {'fields': ('category', 'name', 'description', 'price', 'image', 'view_image', 'is_active',
+                                     'order')}),
+        (_('Offered By'), {'fields': ('types', 'variants')}),
+        (_('Important Dates'), {'fields': ('create_at', 'update_at')}),
+    )
+    list_filter = ['is_active']
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(category__restaurant__id=request.user.restaurant.id)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        user_restaurant = getattr(request.user, 'restaurant', None)
+        if db_field.name == "category":
+            kwargs["queryset"] = Category.objects.filter(
+                models.Q(restaurant=user_restaurant)
+            )
+        if db_field.name == "variants":
+            kwargs["queryset"] = ProductVariant.objects.filter(
+                models.Q(restaurant=user_restaurant) | models.Q(restaurant=None)
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ProductVariantsCustomerAdmin(PermissionsAllowOwnerAdminMixin, RestaurantRelatedObjectAdminMixin,

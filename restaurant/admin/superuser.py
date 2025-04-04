@@ -90,6 +90,18 @@ class CategorySuperuserAdmin(ImageDisplayAminMixin, TranslationAdmin):
     inlines = [ProductInlineAdmin]
 
 
+class ProductSuperuserAdmin(ImageDisplayAminMixin, TranslationAdmin):
+    list_display = ('name', 'category', 'is_active', 'create_at', 'update_at')
+    readonly_fields = ['create_at', 'update_at', 'view_image']
+    fieldsets = (
+        (_('Main Info'), {'fields': ('category', 'name', 'description', 'price', 'image', 'view_image', 'is_active',
+                                     'order')}),
+        (_('Offered By'), {'fields': ('types', 'variants')}),
+        (_('Important Dates'), {'fields': ('create_at', 'update_at')}),
+    )
+    list_filter = ['is_active']
+
+
 class ProductVariantSuperuserAdmin(TranslationAdmin):
     list_display = ['name', 'restaurant', 'create_at', 'update_at']
     readonly_fields = ['create_at', 'update_at']
