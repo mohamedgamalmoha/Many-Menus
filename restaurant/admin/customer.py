@@ -113,7 +113,7 @@ class CategoryCustomerAdmin(PermissionsAllowOwnerAdminMixin, RestaurantRelatedOb
     inlines = [ProductInlineCustomerAdmin]
 
 
-class ProductCustomerAdmin(ImageDisplayAminMixin, TranslationAdmin):
+class ProductCustomerAdmin(PermissionsAllowOwnerAdminMixin, ImageDisplayAminMixin, TranslationAdmin):
     list_display = ('name', 'category', 'is_active', 'create_at', 'update_at')
     readonly_fields = ['create_at', 'update_at', 'view_image']
     fieldsets = (
