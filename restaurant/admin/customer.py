@@ -130,15 +130,18 @@ class ProductCustomerAdmin(PermissionsAllowOwnerAdminMixin, ImageDisplayAminMixi
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         user_restaurant = getattr(request.user, 'restaurant', None)
-        if db_field.name == "category":
-            kwargs["queryset"] = Category.objects.filter(
-                models.Q(restaurant=user_restaurant)
-            )
         if db_field.name == "variants":
             kwargs["queryset"] = ProductVariant.objects.filter(
                 models.Q(restaurant=user_restaurant) | models.Q(restaurant=None)
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        user_restaurant = getattr(request.user, 'restaurant', None)
+        if 'category' in form.base_fields:
+            form.base_fields['category'].queryset = Category.objects.filter(restaurant=user_restaurant)
+        return form
 
 
 class ProductVariantsCustomerAdmin(PermissionsAllowOwnerAdminMixin, RestaurantRelatedObjectAdminMixin,
