@@ -63,7 +63,7 @@ class RestaurantSuperuserAdmin(ImageDisplayAminMixin, TranslationAdmin):
     fieldsets = (
         (_('Main Info'), {'fields': ('owner', ('name', 'slug'), 'email', 'contact_number', 'image', 'view_image',
                                      'is_active', 'order')}),
-        (_('Theme'), {'fields': ('theme', 'primary_color', 'border_color')}),
+        (_('Theme'), {'fields': ('languages', 'theme', 'primary_color', 'border_color')}),
         (_('Important Dates'), {'fields': ('create_at', 'update_at')}),
     )
     inlines = [WorkTimeInlineAdmin, CategoryInlineAdmin, HeaderImageInlineAdmin, SocialMediaLinkInlineAdmin]

@@ -2,6 +2,7 @@ from datetime import time
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -9,6 +10,7 @@ from django_resized import ResizedImageField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from info.models import Theme
+from .fields import MultipleChoiceArrayField
 from .constants import FORCED_IMAGE_FORMAT, MAX_FILE_SIZE
 from .enums import SocialMediaPlatform, DaysOfWeekChoice
 from .validators import FileSizeValidator, validate_hex_color, validate_english_alphanum
@@ -34,6 +36,11 @@ class Restaurant(models.Model):
     is_active = models.BooleanField(default=True, verbose_name=_("Active"))
     order = models.PositiveIntegerField(default=0, blank=True, verbose_name=_('Order By'))
 
+    languages = MultipleChoiceArrayField(
+        models.CharField(choices=settings.LANGUAGES, max_length=100, blank=True, null=True),
+        blank=True,
+        null=True
+    )
     theme = models.ForeignKey(Theme, on_delete=models.SET_NULL, null=True, related_name='restaurants',
                               verbose_name=_("Theme"))
     primary_color = models.CharField(max_length=7, null=True, validators=[validate_hex_color],
