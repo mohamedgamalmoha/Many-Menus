@@ -179,6 +179,7 @@ USE_TZ = True
 LANGUAGES = [
     ('ar', _('Arabic')),
     ('he', _('Hebrew')),
+    ('en', _('English'))
 ]
 
 # Enable fallback to default language if a translation is missing
